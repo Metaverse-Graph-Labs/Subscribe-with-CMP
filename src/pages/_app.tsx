@@ -1,8 +1,9 @@
 import 'tailwindcss/tailwind.css'
+import '../css/styles.css'
 import { ThemeProvider } from 'next-themes'
 import Web3Provider from '@/components/Web3Provider'
 
-const App = ({ Component, pageProps }) => {
+const App = ({ Component, pageProps }: any) => {
 	return (
 		<ThemeProvider attribute="class">
 			<Web3Provider>

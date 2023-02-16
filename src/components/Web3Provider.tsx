@@ -11,7 +11,7 @@ const client = createClient(
 	})
 )
 
-const Web3Provider = ({ children }) => {
+const Web3Provider = ({ children }: any) => {
 	const { resolvedTheme } = useTheme()
 
 	return (
