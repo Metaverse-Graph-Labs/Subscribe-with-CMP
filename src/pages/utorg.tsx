@@ -1,6 +1,14 @@
 import Header from '@/components/HeaderBlockBaby'
 import { BuyWithUtorg } from '@/components/BuyWithUtorg'
-import { ArrowRightOnRectangleIcon, CreditCardIcon, LockClosedIcon } from '@heroicons/react/20/solid'
+import {
+	ArrowRightOnRectangleIcon,
+	CheckCircleIcon,
+	CreditCardIcon,
+	ExclamationCircleIcon,
+	LockClosedIcon,
+} from '@heroicons/react/20/solid'
+import { useRouter } from 'next/router'
+import { XMarkIcon } from '@heroicons/react/24/outline'
 
 const features = [
 	{
@@ -27,6 +35,56 @@ const features = [
 ]
 
 export default function Utorg() {
+	const router = useRouter()
+	const { success } = router.query
+
+	const showSuccess = () => {
+		let header
+		let message
+		let successIcon
+		if (success === 'true') {
+			header = 'Payment Sucessfull'
+			message =
+				'Utorg will now process your payment and you should receive it in the wallet that you have signed with in a few minutes'
+			successIcon = true
+		} else if (success === 'false') {
+			header = 'Payment Unsuccessful'
+			message = 'Utorg could not process your payment correctly. Please try again later.'
+		} else {
+			return <></>
+		}
+
+		return (
+			<div className="p-4 w-96 m-auto">
+				<div className="flex items-start m-auto">
+					<div className="flex-shrink-0">
+						{successIcon ? (
+							<CheckCircleIcon className="h-6 w-6 text-green-400" aria-hidden="true" />
+						) : (
+							<ExclamationCircleIcon className="h-6 w-6 text-red-400" aria-hidden="true" />
+						)}
+					</div>
+					<div className="ml-3 w-0 flex-1 pt-0.5">
+						<p className="text-sm font-medium text-gray-900">{header}</p>
+						<p className="mt-1 text-sm text-gray-500">{message}</p>
+					</div>
+					{/* <div className="ml-4 flex flex-shrink-0">
+						<button
+							type="button"
+							className="inline-flex rounded-md bg-white text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+							onClick={() => {
+								// setShow(false);
+							}}
+						>
+							<span className="sr-only">Close</span>
+							<XMarkIcon className="h-5 w-5" aria-hidden="true" />
+						</button>
+					</div> */}
+				</div>
+			</div>
+		)
+	}
+
 	return (
 		<div className="buy-box w-full min-h-screen">
 			<Header />
@@ -65,6 +123,7 @@ export default function Utorg() {
 							))}
 						</dl>
 					</div>
+					<div className="mt-8 m-auto">{showSuccess()}</div>
 				</div>
 			</div>
 		</div>
