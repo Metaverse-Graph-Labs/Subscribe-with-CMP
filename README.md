@@ -1,17 +1,10 @@
-# Buy CMP Starter Kit
+# Subscribe with CMP
 
-> The template to bootstrap your Caduceus DApp, including a buy cmp button.
+> The template was bootstrapped by Buy CMP. 
 
-This starter kit is a fork of DappStarter. However it has been amended to connect with the caducueus blockchain and include a Buy CMP button which will include multiple vendors in the future. 
+This repository will provide a way for apps to create subscriptions that accept CMP. This starter kit is a fork of DappStarter. However it has been amended to connect with the caducueus blockchain.
 
 This starter kit is composed of Next.js and Tailwind CSS, with ConnectKit, ethers, & wagmi for all your web3 needs. It uses Typescript and an opinionated directory structure for maximum dev confy-ness.
-
-Currently the vendors supported are: 
-* Utorg 
-
-Vendors coming soon
-* Swipelux
-* NowPayments
 
 ## Getting Started
 
@@ -37,7 +30,6 @@ To learn more about the components of this kit, take a look at the following res
 -   [Ethers Documentation](https://docs.ethers.io/v5/) - learn about Ethers features and API.
 -   [wagmi Documentation](https://wagmi.sh/) - learn about wagmi features and API.
 -   [ConnectKit Documentation](https://docs.family.co/connectkit) - learn about ConnectKit's features and API.
--   [Utorg](https://utorg.pro) - Allow customers to buy CMP with card
 
 
 ## Deployment
