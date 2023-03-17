@@ -1,12 +1,23 @@
-# dApp Starter
+# Buy CMP Starter Kit
 
-> The template I use to kickstart all my web3 apps.
+> The template to bootstrap your Caduceus DApp, including a buy cmp button.
+
+This starter kit is a fork of DappStarter. However it has been amended to connect with the caducueus blockchain and include a Buy CMP button which will include multiple vendors in the future. 
 
 This starter kit is composed of Next.js and Tailwind CSS, with ConnectKit, ethers, & wagmi for all your web3 needs. It uses Typescript and an opinionated directory structure for maximum dev confy-ness.
 
+Currently the vendors supported are: 
+* Utorg 
+
+Vendors coming soon
+* Swipelux
+* NowPayments
+
 ## Getting Started
 
-First, install dependencies with `yarn install`. Then, initialize the env file with `cp .env.example .env`, and add your Infura project id. Finally, run the development server with `yarn dev`.
+First, install dependencies with `yarn install`. Then, initialize the env file with `cp .env.example .env`, and add your UTORG SID if you want to integrate UTORG. 
+
+Finally, run the development server with `yarn dev`.
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
@@ -26,6 +37,7 @@ To learn more about the components of this kit, take a look at the following res
 -   [Ethers Documentation](https://docs.ethers.io/v5/) - learn about Ethers features and API.
 -   [wagmi Documentation](https://wagmi.sh/) - learn about wagmi features and API.
 -   [ConnectKit Documentation](https://docs.family.co/connectkit) - learn about ConnectKit's features and API.
+-   [Utorg](https://utorg.pro)
 
 ## Deployment
 

@@ -8,7 +8,11 @@ export default function Example() {
 				<div className="relative px-6 lg:px-8">
 					<div className="mx-auto max-w-2xl py-24 sm:py-32 lg:py-48">
 						<div className="hidden sm:mb-8 sm:flex sm:justify-center">
-							<Link href="/coming-soon" className="font-semibold text-indigo-600">
+							<Link
+								href="https://github.com/Metaverse-Graph-Labs/Buy-CMP"
+								className="font-semibold text-indigo-600"
+								target="_blank"
+							>
 								<div className="glow-on-hover-white relative rounded-full py-1 px-3 text-sm leading-6 text-gray-600 ring-1 ring-gray-900/10 hover:ring-gray-900/20">
 									To integrate a &quot;Buy CMP&quot; button into your website check out this project
 									on our{' '}
