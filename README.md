@@ -37,7 +37,8 @@ To learn more about the components of this kit, take a look at the following res
 -   [Ethers Documentation](https://docs.ethers.io/v5/) - learn about Ethers features and API.
 -   [wagmi Documentation](https://wagmi.sh/) - learn about wagmi features and API.
 -   [ConnectKit Documentation](https://docs.family.co/connectkit) - learn about ConnectKit's features and API.
--   [Utorg](https://utorg.pro)
+-   [Utorg](https://utorg.pro) - Allow customers to buy CMP with card
+
 
 ## Deployment
 
