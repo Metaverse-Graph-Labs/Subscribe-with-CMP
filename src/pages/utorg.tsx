@@ -45,7 +45,7 @@ export default function Utorg() {
 		if (success === 'true') {
 			header = 'Payment Sucessfull'
 			message =
-				'Utorg will now process your payment and you should receive it in the wallet that you have signed with in a few minutes'
+				'Utorg will now verify your KYC documents and you will receive an emial once it is compete. If successful you payment will be sent, otherwise you will be automatically refunded.'
 			successIcon = true
 		} else if (success === 'false') {
 			header = 'Payment Unsuccessful'
