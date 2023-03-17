@@ -1,4 +1,4 @@
-import Header from '@/components/HeaderBlockBaby'
+import Header from '@/components/Header'
 import { BuyWithUtorg } from '@/components/BuyWithUtorg'
 import {
 	ArrowRightOnRectangleIcon,

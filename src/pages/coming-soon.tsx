@@ -1,4 +1,4 @@
-import Header from '@/components/HeaderBlockBaby'
+import Header from '@/components/Header'
 import Link from 'next/link'
 
 export default function ComingSoon() {
