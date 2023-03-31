@@ -9,6 +9,7 @@ import caduceusLogo from '../../public/images/caduceus-logo-black.png'
 
 const navigation = [
 	{ name: 'Browse', href: '/browse' },
+	{ name: 'Dashboard', href: '/dashboard' },
 	{ name: 'Create', href: '/create' },
 	{ name: 'How it works', href: '/how-it-works' },
 ]

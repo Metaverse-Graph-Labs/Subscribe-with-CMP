@@ -1,14 +1,12 @@
 import ConnectWallet from '@/components/ConnectWallet'
-import Header from '@/components/Header'
 import { get_balance } from '@/lib/cmp'
+import { MAIN_WCMP_ADDRESS } from '@/lib/consts'
 import * as wcmp from '@/lib/wcmp'
+import * as payment from '@/lib/wcmpPayment'
+import { Signer } from 'ethers'
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
 import { useAccount, useProvider, useSigner } from 'wagmi'
-import * as payment from '@/lib/wcmpPayment'
-import { MAIN_WCMP_ADDRESS } from '@/lib/consts'
-import { Signer } from 'ethers'
-import { verify } from 'crypto'
 
 export default function ComingSoon() {
 	const provider = useProvider()
@@ -64,68 +62,61 @@ export default function ComingSoon() {
 
 	return (
 		<>
-			<div className="h-screen bg-white">
-				<Header />
-				<main className="grid h-[calc(100%-80px)] place-items-center bg-white py-24 px-6 sm:py-32 lg:px-8">
-					{!isConnected && (
-						<div className="text-center">
-							<ConnectWallet />
+			<main className="grid h-[calc(100%-80px)] place-items-center bg-white py-24 px-6 sm:py-32 lg:px-8">
+				{!isConnected && (
+					<div className="text-center">
+						<ConnectWallet />
+					</div>
+				)}
+
+				{isConnected && (
+					<div className="text-center">
+						<h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-5xl">
+							Subscribe with WCMP
+						</h2>
+						<p className="mt-6 text-base leading-7 text-gray-600">Your WCMP balance: {cmpBalance} CMP</p>
+						<p className="mt-6 text-base leading-7 text-gray-600">Your WCMP balance: {wcmpBalance} WCMP</p>
+
+						<div className="mt-10 flex items-center justify-center gap-x-6">
+							<Link className="glow-on-hover" href={'#'} onClick={createPlan}>
+								Create Plan
+							</Link>
 						</div>
-					)}
 
-					{isConnected && (
-						<div className="text-center">
-							<h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-5xl">
-								Subscribe with WCMP
-							</h2>
-							<p className="mt-6 text-base leading-7 text-gray-600">
-								Your WCMP balance: {cmpBalance} CMP
-							</p>
-							<p className="mt-6 text-base leading-7 text-gray-600">
-								Your WCMP balance: {wcmpBalance} WCMP
-							</p>
-
-							<div className="mt-10 flex items-center justify-center gap-x-6">
-								<Link className="glow-on-hover" href={'#'} onClick={createPlan}>
-									Create Plan
-								</Link>
-							</div>
-
-							<div className="mt-10 flex items-center justify-center gap-x-6">
-								<Link className="glow-on-hover" href={'#'} onClick={subscribe}>
-									Subscribe
-								</Link>
-							</div>
-
-							<div className="mt-10 flex items-center justify-center gap-x-6">
-								<Link className="glow-on-hover" href={'#'}>
-									Pay
-								</Link>
-							</div>
-
-							<div className="mt-10 flex items-center justify-center gap-x-6">
-								<Link className="glow-on-hover" href={'#'} onClick={signMessage}>
-									Sign Message
-								</Link>
-							</div>
-							<div className="text-gray-600">{signature.length > 0 && <p>Signature: {signature}</p>}</div>
-
-							<div className="mt-10 flex items-center justify-center gap-x-6">
-								<Link className="glow-on-hover" href={'#'} onClick={verifyMessage}>
-									Get Message Signer
-								</Link>
-							</div>
-							<div className="text-gray-600">{signer.length > 0 && <p>Signer: {signer}</p>}</div>
-
-							<div className="mt-10 flex items-center justify-center gap-x-6">
-								<Link href="/" className="glow-on-hover">
-									Go back home
-								</Link>
-							</div>
+						<div className="mt-10 flex items-center justify-center gap-x-6">
+							<Link className="glow-on-hover" href={'#'} onClick={subscribe}>
+								Subscribe
+							</Link>
 						</div>
-					)}
-				</main>
-			</div>
+
+						<div className="mt-10 flex items-center justify-center gap-x-6">
+							<Link className="glow-on-hover" href={'#'}>
+								Pay
+							</Link>
+						</div>
+
+						<div className="mt-10 flex items-center justify-center gap-x-6">
+							<Link className="glow-on-hover" href={'#'} onClick={signMessage}>
+								Sign Message
+							</Link>
+						</div>
+						<div className="text-gray-600">{signature.length > 0 && <p>Signature: {signature}</p>}</div>
+
+						<div className="mt-10 flex items-center justify-center gap-x-6">
+							<Link className="glow-on-hover" href={'#'} onClick={verifyMessage}>
+								Get Message Signer
+							</Link>
+						</div>
+						<div className="text-gray-600">{signer.length > 0 && <p>Signer: {signer}</p>}</div>
+
+						<div className="mt-10 flex items-center justify-center gap-x-6">
+							<Link href="/" className="glow-on-hover">
+								Go back home
+							</Link>
+						</div>
+					</div>
+				)}
+			</main>
 		</>
 	)
 }

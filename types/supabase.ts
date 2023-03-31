@@ -14,22 +14,28 @@ export interface Database {
           company: string | null
           contact: string | null
           created_at: string | null
+          description: string | null
           id: number
-          wallet: string | null
+          link: string | null
+          user_id: string | null
         }
         Insert: {
           company?: string | null
           contact?: string | null
           created_at?: string | null
+          description?: string | null
           id?: number
-          wallet?: string | null
+          link?: string | null
+          user_id?: string | null
         }
         Update: {
           company?: string | null
           contact?: string | null
           created_at?: string | null
+          description?: string | null
           id?: number
-          wallet?: string | null
+          link?: string | null
+          user_id?: string | null
         }
       }
       subscriptions: {
@@ -38,10 +44,10 @@ export interface Database {
           description: string | null
           duration: number | null
           id: number
-          merchant_id: number | null
           price: number | null
           published: boolean | null
           title: string | null
+          user_id: string | null
           wallet: string | null
         }
         Insert: {
@@ -49,10 +55,10 @@ export interface Database {
           description?: string | null
           duration?: number | null
           id?: number
-          merchant_id?: number | null
           price?: number | null
           published?: boolean | null
           title?: string | null
+          user_id?: string | null
           wallet?: string | null
         }
         Update: {
@@ -60,10 +66,10 @@ export interface Database {
           description?: string | null
           duration?: number | null
           id?: number
-          merchant_id?: number | null
           price?: number | null
           published?: boolean | null
           title?: string | null
+          user_id?: string | null
           wallet?: string | null
         }
       }
@@ -94,20 +100,20 @@ export interface Database {
         Row: {
           created_at: string | null
           id: number
-          subscription_id: number | null
-          user_id: string | null
+          subscription_id: number
+          user_id: string
         }
         Insert: {
           created_at?: string | null
           id?: number
-          subscription_id?: number | null
-          user_id?: string | null
+          subscription_id: number
+          user_id: string
         }
         Update: {
           created_at?: string | null
           id?: number
-          subscription_id?: number | null
-          user_id?: string | null
+          subscription_id?: number
+          user_id?: string
         }
       }
       users: {

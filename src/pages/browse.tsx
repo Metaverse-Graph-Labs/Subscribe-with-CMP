@@ -1,24 +1,83 @@
-import { CircleStackIcon } from '@heroicons/react/20/solid'
-
-const features = [
-	{
-		name: 'Fantasy Sports Logic Subscription',
-		description: `Welcome to Fantasy Sports Logic, the premier destination for fantasy sports enthusiasts looking to gain an edge in their games. Our company is dedicated to providing our users with the best tips, tools, and technology available, so they can make informed decisions and win big.
-			 At Fantasy Sports Logic, we understand the importance of staying ahead of the competition. That's why we've developed the Contrarian Edge Optimizer, powered by our patented machine technology. Our optimizer takes into account all of the relevant factors that can impact your games, including player statistics, injuries, and game conditions, to provide you with the most accurate projections and advice available.
-			 But we don't stop there.
-			 We are committed to helping our users at every step of the way, from beginner to professional.
-			 That's why we offer a range of resources to help you hone your skills and improve your game.
-			 Whether you prefer daily podcasts, a weekly newsletter, or live streaming DFS news, we have the tools and resources you need to stay informed and stay ahead.
-			 And if that's not enough, we're excited to announce that we'll soon be launching a TV show, bringing you even more insights and strategies to help you win big.
-			 Whether you're new to fantasy sports or a seasoned pro, Fantasy Sports Logic is the go-to website for all your fantasy sports needs.
-			 So why wait? Sign up today and start winning with Fantasy Sports Logic.
-			`,
-		href: '/subscribe/fantasy-sports-logic',
-		icon: CircleStackIcon,
-	},
-]
+import { supabaseClient } from '@/lib/supapase-client'
+import { useAuth, useSession } from '@clerk/nextjs'
+import { BuildingOfficeIcon, CurrencyDollarIcon } from '@heroicons/react/24/outline'
+import { useEffect, useState } from 'react'
+import { Database } from 'types/supabase'
 
 export default function Browse() {
+	const { session, isLoaded } = useSession()
+	const { userId } = useAuth()
+	const [loading, setLoading] = useState(true)
+	const [merchants, setMerchants] = useState<Database['public']['Tables']['merchants']['Row'][]>()
+	const [subscriptions, setSubscriptions] = useState<Database['public']['Tables']['subscriptions']['Row'][]>()
+
+	const subscribe = async (subscriptionId: number) => {
+		if (!session || !userId) {
+			return
+		}
+
+		const supabaseAccessToken = await session.getToken({
+			template: 'supabase',
+		})
+
+		const supabase = await supabaseClient(supabaseAccessToken!)
+		const { data, error } = await supabase
+			.from('user_subscriptions')
+			.insert({ subscription_id: subscriptionId, user_id: userId })
+			.select()
+
+		if (error) {
+			alert(error)
+		} else {
+			alert('You subscribed successfully')
+		}
+	}
+	// on first load, fetch and set todos
+	useEffect(() => {
+		const loadSubscriptions = async () => {
+			try {
+				setLoading(true)
+				const supabaseAccessToken = await session!.getToken({
+					template: 'supabase',
+				})
+
+				const supabase = await supabaseClient(supabaseAccessToken!)
+				const { data: subscriptions } = await supabase.from('subscriptions').select('*')
+				if (subscriptions) {
+					setSubscriptions(subscriptions)
+				}
+			} catch (e) {
+				alert(e)
+			} finally {
+				setLoading(false)
+			}
+		}
+
+		const loadMerchants = async () => {
+			try {
+				setLoading(true)
+				const supabaseAccessToken = await session!.getToken({
+					template: 'supabase',
+				})
+
+				const supabase = await supabaseClient(supabaseAccessToken!)
+				const { data: merchants } = await supabase.from('merchants').select('*')
+				if (merchants) {
+					setMerchants(merchants)
+				}
+			} catch (e) {
+				alert(e)
+			} finally {
+				setLoading(false)
+			}
+		}
+
+		if (isLoaded) {
+			loadMerchants()
+			loadSubscriptions()
+		}
+	}, [isLoaded])
+
 	return (
 		<div className="w-full ">
 			<div className="py-24 sm:py-32 w-full ">
@@ -36,25 +95,85 @@ export default function Browse() {
 					</div>
 					<div className="mx-auto mt-16 max-w-2xl sm:mt-20 lg:mt-24 lg:max-w-none">
 						<dl className="grid max-w-xl grid-cols-1 gap-x-8 gap-y-16 lg:max-w-none lg:grid-cols-1">
-							{features.map(feature => (
-								<div key={feature.name} className="flex flex-col">
-									<dt className="flex items-center gap-x-3 text-base font-semibold leading-7 text-gray-900">
-										<feature.icon className="h-5 w-5 flex-none text-black" aria-hidden="true" />
-										{feature.name}
-									</dt>
-									<dd className="mt-4 flex flex-auto flex-col text-base leading-7 text-gray-600">
-										<p className="flex-auto">{feature.description}</p>
-										<p className="mt-6">
-											<a
-												href={feature.href}
-												className="text-base font-semibold leading-7 text-indigo-600"
-											>
-												{feature.name}
-											</a>
-										</p>
-									</dd>
-								</div>
-							))}
+							{merchants &&
+								merchants
+									.sort((a, b) => a.id - b.id)
+									.map(merchant => (
+										<div key={merchant.company} className="flex flex-col">
+											<dt className="flex items-center gap-x-3 text-base font-semibold leading-7 text-gray-900">
+												<BuildingOfficeIcon
+													className="h-5 w-5 flex-none text-black"
+													aria-hidden="true"
+												/>
+												{merchant.company}
+											</dt>
+											<dd className="mt-4 flex flex-auto flex-col text-base leading-7 text-gray-600">
+												<p className="flex-auto">{merchant.description}</p>
+												<div className="flex gap-10 mt-6">
+													<div className="flex gap-3 mt-2 items-center">
+														<p className="">Link: </p>
+														<a
+															href={merchant.link!}
+															className="text-base font-semibold leading-7 text-indigo-600"
+														>
+															{merchant.link}
+														</a>
+														<p className="ml-5">Contact: </p>
+														<a
+															href={`mailto:${merchant.contact}`}
+															className="text-base font-semibold leading-7 text-indigo-600"
+														>
+															{merchant.contact}
+														</a>
+													</div>
+												</div>
+											</dd>
+											<div className="flex flex-col pl-10 gap-x-3 mt-10 gap-14">
+												{!subscriptions?.filter(
+													subscription => subscription.user_id === merchant.user_id
+												).length && (
+													<p>More subscriptions coming soon for {merchant.company}</p>
+												)}
+												{subscriptions
+													?.filter(subscription => subscription.user_id === merchant.user_id)
+													.map(subscription => (
+														<div>
+															<div className="flex align-middle  items-center gap-5 font-semibold leading-7 text-gray-900">
+																<CurrencyDollarIcon
+																	className="h-5 w-5 flex-none text-black"
+																	aria-hidden="true"
+																/>
+																<h3>{subscription.title}</h3>
+															</div>
+															<div className="flex gap-3 mt-2 items-center">
+																<p className="">Price: </p>
+																<p className="text-base font-semibold leading-7 text-indigo-600">
+																	${subscription.price}
+																</p>
+																<p className="ml-10">Billed every: </p>
+																<p className="text-base font-semibold leading-7 text-indigo-600">
+																	{subscription.duration} days
+																</p>
+																<p className="ml-10">
+																	Recommended subscription length:{' '}
+																</p>
+																<p className="text-base font-semibold leading-7 text-indigo-600">
+																	12 months
+																</p>
+															</div>
+															<p className="mt-5">{subscription.description}</p>
+															{/* TODO: ADD functionality */}
+															<button
+																className="mt-5 glow-on-hover"
+																onClick={() => subscribe(subscription.id)}
+															>
+																Subscribe
+															</button>
+														</div>
+													))}
+											</div>
+										</div>
+									))}
 						</dl>
 					</div>
 				</div>
