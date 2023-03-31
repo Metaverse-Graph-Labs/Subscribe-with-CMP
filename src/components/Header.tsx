@@ -4,12 +4,13 @@ import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline'
 import ConnectWallet from '@/components/ConnectWallet'
 import Link from 'next/link'
 import Image from 'next/image'
+import { SignedIn, SignedOut, UserButton } from '@clerk/nextjs'
+import caduceusLogo from '../../public/images/caduceus-logo-black.png'
 
 const navigation = [
-	{ name: 'Buy with Utorg', href: '/utorg' },
-	{ name: 'Buy with Swipelux', href: '/coming-soon' },
-	{ name: 'Buy with Alchemy Pay', href: '/coming-soon' },
-	{ name: 'Buy with NowPayments', href: '/coming-soon' },
+	{ name: 'Browse', href: '/browse' },
+	{ name: 'Create', href: '/create' },
+	{ name: 'How it works', href: '/how-it-works' },
 ]
 
 export default function Header() {
@@ -22,13 +23,7 @@ export default function Header() {
 					<div className="flex lg:flex-1">
 						<Link href="/" className="-m-1.5 p-1.5">
 							<span className="sr-only">Caduceus Foundation</span>
-							<img
-								className="h-8"
-								src="/images/caduceus-logo-black.png"
-								alt="caduceus logo"
-								// width={200}
-								// height={38}
-							/>
+							<Image className="h-9" src={caduceusLogo} alt="caduceus logo" width={200} height={138} />
 						</Link>
 					</div>
 					<div className="flex lg:hidden">
@@ -53,18 +48,34 @@ export default function Header() {
 						))}
 					</div>
 					<div className="hidden lg:flex lg:flex-1 lg:justify-end">
-						<ConnectWallet />
+						<div>
+							<SignedOut>
+								<Link className="glow-on-hover" href="/sign-in">
+									Sign in
+								</Link>
+							</SignedOut>
+							<SignedIn>
+								<div className="flex justify-center items-center gap-5">
+									<UserButton
+										userProfileMode="navigation"
+										userProfileUrl="/user"
+										afterSignOutUrl="/"
+										// afterSignOutAll="/"
+										// afterSignOutOneUrl="/"
+									/>
+									<ConnectWallet />
+								</div>
+							</SignedIn>
+						</div>
 					</div>
 				</nav>
 				<Dialog as="div" open={mobileMenuOpen} onClose={setMobileMenuOpen}>
-					<Dialog.Panel
-						// focus="true"
-						className="fixed inset-0 z-10 overflow-y-auto bg-white px-6 py-6 lg:hidden"
-					>
+					<div className="fixed inset-0 z-10" />
+					<Dialog.Panel className="fixed inset-y-0 right-0 z-10 w-full overflow-y-auto bg-white px-6 py-6 sm:max-w-sm sm:ring-1 sm:ring-gray-900/10">
 						<div className="flex items-center justify-between">
 							<Link href="/" className="-m-1.5 p-1.5">
 								<span className="sr-only">Caduceus Foundation</span>
-								<img className="h-8" src="/images/caduceus-logo-black.png" alt="caduceus logo" />
+								<Image className="h-9" src={caduceusLogo} alt="caduceus logo" width={200} />
 							</Link>
 							<button
 								type="button"
@@ -82,6 +93,7 @@ export default function Header() {
 										<Link
 											key={item.name}
 											href={item.href}
+											onClick={() => setMobileMenuOpen(false)}
 											className="-mx-3 block rounded-lg py-2 px-3 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-400/10"
 										>
 											{item.name}
@@ -89,7 +101,27 @@ export default function Header() {
 									))}
 								</div>
 								<div className="py-6">
-									<ConnectWallet />
+									<div>
+										<SignedOut>
+											<Link
+												href="/sign-in"
+												className="glow-on-hover"
+												onClick={() => setMobileMenuOpen(false)}
+											>
+												Sign in
+											</Link>
+										</SignedOut>
+										<SignedIn>
+											<UserButton
+												userProfileMode="navigation"
+												userProfileUrl="/user"
+												afterSignOutUrl="/"
+												// afterSignOutAll="/"
+												// afterSignOutOneUrl="/"
+											/>
+											<ConnectWallet />
+										</SignedIn>
+									</div>
 								</div>
 							</div>
 						</div>
