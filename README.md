@@ -20,6 +20,25 @@ You can start editing the page by modifying `pages/index.tsx`. The page auto-upd
 
 The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
 
+This project uses clerk.dev for authentication. 
+And uses supabase for a postgresql database. 
+
+### Clerk 
+Clerk manages authentication for the entire app. There are logged in pages and there login functionality managed by the SignedIn and SignedOut components.
+
+### Supabase
+When you make changes to the schema in the supabase portal you have to re-generate the types by running the following command:
+
+```
+npm run generate-db-types
+```
+
+Or you can directly run the command:
+```
+npx supabase gen types typescript --project-id "iqbppcvxdaqzevqhhiid" --schema public > types/supabase.ts
+```
+
+
 ## Learn More
 
 To learn more about the components of this kit, take a look at the following resources:

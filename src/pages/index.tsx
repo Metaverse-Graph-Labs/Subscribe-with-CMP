@@ -1,5 +1,6 @@
 import Link from 'next/link'
-export default function Example() {
+
+export default function Home() {
 	return (
 		<div className="isolate">
 			<main>
@@ -28,18 +29,12 @@ export default function Example() {
 								Or if you are a developer then start accepting recurring CMP subscriptions straight away
 							</p>
 							<div className="mt-10 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 gap-6 items-center justify-center">
-								<Link href="/utorg" className="glow-on-hover font-semibold min-w-fit">
+								<Link href="/browse" className="glow-on-hover font-semibold min-w-fit">
 									Browse Services that accept CMP
 								</Link>
-								<Link href="/coming-soon" className="glow-on-hover-white font-semibold min-w-fit">
+								<Link href="/create" className="glow-on-hover-white font-semibold min-w-fit">
 									Incorporate monthly CMP subscriptions into your product
 								</Link>
-								{/* <Link href="/coming-soon" className="glow-on-hover font-semibold min-w-fit">
-									Alchemy Pay
-								</Link>
-								<Link href="/coming-soon" className="glow-on-hover-white font-semibold min-w-fit">
-									NowPayments
-								</Link> */}
 							</div>
 						</div>
 					</div>

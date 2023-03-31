@@ -17,7 +17,7 @@ const ClerkFeatures = () => (
 )
 
 const SSRDemoLink = () => (
-	<Link href="/ssr-demo" className={styles.cardContent}>
+	<Link href="demo/ssr-demo" className={styles.cardContent}>
 		<img alt="SSR demo" src="/icons/sparkles.svg" />
 		<div>
 			<h3>Visit the SSR demo page</h3>
