@@ -32,4 +32,24 @@ export const chains: Chain[] = [
 			symbol: 'CMP',
 		},
 	},
+	// {
+	// 	id: 1337,
+	// 	name: 'Ganache Local Testnet',
+	// 	network: 'Ganache',
+	// 	rpcUrls: {
+	// 		default: { http: ['http://127.0.0.1:7545'] },
+	// 		public: { http: ['http://127.0.0.1:7545'] },
+	// 	},
+	// 	blockExplorers: { default: { url: 'https://galaxy.scan.caduceus.foundation/', name: 'Ganache Scan' } },
+	// 	nativeCurrency: {
+	// 		decimals: 18,
+	// 		name: 'Caduceus Metaverse Protocol',
+	// 		symbol: 'CMP-GANACHE',
+	// 	},
+	// },
 ]
+
+// export const MAIN_WCMP_ADDRESS = '0x1fcba3cb797465f38839f48ca7c9cda9d9aac28b'
+// Galaxy
+export const MAIN_WCMP_ADDRESS = '0xab6b6212e5443228d586ce5aeb54b02b185208cc'
+export const MAIN_WCMP_PAYMENT_ADDRESS = '0x1F86EDDe4D6C9861cadb3c94AA3644A78612B0cf'
