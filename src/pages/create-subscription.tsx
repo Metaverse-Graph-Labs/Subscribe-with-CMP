@@ -7,17 +7,21 @@ import * as wcmp from '@/lib/wcmp'
 import { MAIN_WCMP_ADDRESS, MAIN_WCMP_PAYMENT_ADDRESS } from '@/lib/consts'
 import { BigNumber, ethers, Signer } from 'ethers'
 import { Plan } from '@/lib/types/CMPPayment'
+interface ExceptionError extends Error {
+	message: string
+}
 
 export default function CreateSubscription() {
-	const { data } = useSigner()
+	const signer = useSigner()
 	const { isConnected, address } = useAccount()
 	const [plan, setPlan] = useState<Plan>()
 	const [totalPlans, setTotalPlans] = useState<number>(0)
 
 	// eslint-disable-next-line react-hooks/exhaustive-deps
 	const initData = async () => {
-		payment.setSigner(data as Signer)
-		wcmp.setSigner(data as Signer)
+		console.log('Setting signer...', signer)
+		payment.setSigner(signer.data as Signer)
+		wcmp.setSigner(signer.data as Signer)
 		const nextPlanId = (await payment.getNextPlanId()).toString()
 		console.log({ nextPlanId })
 		setTotalPlans(parseInt(nextPlanId))
@@ -29,6 +33,7 @@ export default function CreateSubscription() {
 			initData()
 		}
 		return () => {}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [])
 
 	const subscribe = async () => {
@@ -37,7 +42,7 @@ export default function CreateSubscription() {
 			alert('Please connect your wallet first.')
 			return
 		}
-		if (!plan || !plan.id) {
+		if (!plan) {
 			throw new Error('Please select a plan')
 		}
 		try {
@@ -47,7 +52,7 @@ export default function CreateSubscription() {
 			if (wcmpBalance.lt(plan.amount)) {
 				console.log('Insufficient WCMP balance')
 				//1.1. If not, Check if user has enough CMP balance
-				const balance = await data?.getBalance()
+				const balance = await signer.data?.getBalance()
 				console.log({ balance })
 				//1.2. If not, alert user to top up
 				if (balance && balance.lt(plan.amount)) {
@@ -69,9 +74,29 @@ export default function CreateSubscription() {
 			const tx3 = await payment.subscribe(plan.id)
 			const receipt3 = await tx3.wait()
 			console.log({ receipt3 })
-		} catch (error) {
+		} catch (error: any | ExceptionError) {
 			console.log(error)
-			alert(error?.message)
+			alert(error.message)
+		}
+	}
+
+	const unsubscribe = async () => {
+		console.log('Unsubscribing...')
+		if (!isConnected) {
+			alert('Please connect your wallet first.')
+			return
+		}
+		if (!plan) {
+			throw new Error('Please select a plan')
+		}
+		try {
+			//TODO: should we cancel the approved WCMP? The user might have other subscriptions.
+			// const tx = await wcmp.approve(MAIN_WCMP_PAYMENT_ADDRESS, '0')
+			const tx2 = await payment.cancelSubscription(plan.id)
+			alert('Unsubscribed successfully')
+		} catch (error: any | ExceptionError) {
+			console.log('Error: ', error)
+			alert(error.message)
 		}
 	}
 
@@ -152,6 +177,9 @@ export default function CreateSubscription() {
 						<div className="mt-10 flex items-center justify-center gap-x-6">
 							<button className="glow-on-hover" onClick={subscribe}>
 								Subscribe
+							</button>
+							<button className="glow-on-hover" onClick={unsubscribe}>
+								Unsubscribe
 							</button>
 						</div>
 					</div>

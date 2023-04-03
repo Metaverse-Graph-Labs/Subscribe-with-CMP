@@ -325,6 +325,12 @@ export const subscribe = async (planId: number) => {
 	return tx
 }
 
+export const cancelSubscription = async (planId: number) => {
+	const wcmpContract = getContractInstanceWithSigner()
+	const tx = await wcmpContract.cancel(planId)
+	return tx
+}
+
 export const pay = async (planId: number) => {
 	const wcmpContract = getContractInstanceWithSigner()
 	const tx = await wcmpContract.pay(planId)
