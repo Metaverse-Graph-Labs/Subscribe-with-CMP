@@ -104,6 +104,8 @@ export default function CreateSubscription() {
 	const loadPlan = async (planId: number) => {
 		try {
 			const plan = await payment.getPlan(planId)
+			const subscription = await payment.getSubscription(address?.toString() ?? '', planId)
+			console.log({ plan, subscription })
 			const { amount, frequency, merchant, token } = plan
 			setPlan({
 				id: planId,
@@ -111,6 +113,7 @@ export default function CreateSubscription() {
 				frequency: frequency as BigNumber,
 				merchant: merchant as string,
 				token: token as string,
+				subscription: subscription,
 			})
 		} catch (error) {
 			console.log(error)
@@ -191,16 +194,33 @@ export default function CreateSubscription() {
 										<p>Duration/Frequency: {plan.frequency.toString()}</p>
 									</>
 								)}
+								{plan?.subscription?.subscriber != ethers.constants.AddressZero && (
+									<>
+										<p>Subscriber: {plan?.subscription?.subscriber}</p>
+										<p>
+											Subscription Date:{' '}
+											{new Date((plan?.subscription?.start || 0) * 1000).toISOString()}
+										</p>
+										<p>
+											Next Payment:{' '}
+											{new Date((plan?.subscription?.nextPayment || 0) * 1000).toISOString()}
+										</p>
+									</>
+								)}
 							</div>
 						</div>
 
 						<div className="mt-10 flex items-center justify-center gap-x-6">
-							<button className="glow-on-hover" onClick={subscribe}>
-								Subscribe
-							</button>
-							<button className="glow-on-hover" onClick={unsubscribe}>
-								Unsubscribe
-							</button>
+							{plan?.subscription?.subscriber === ethers.constants.AddressZero && (
+								<button className="glow-on-hover" onClick={subscribe}>
+									Subscribe
+								</button>
+							)}
+							{plan?.subscription?.subscriber != ethers.constants.AddressZero && (
+								<button className="glow-on-hover" onClick={unsubscribe}>
+									Unsubscribe
+								</button>
+							)}
 						</div>
 					</div>
 				</main>
