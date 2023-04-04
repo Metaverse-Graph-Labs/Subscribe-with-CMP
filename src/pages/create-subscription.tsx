@@ -16,6 +16,7 @@ export default function CreateSubscription() {
 	const { isConnected, address } = useAccount()
 	const [plan, setPlan] = useState<Plan>()
 	const [totalPlans, setTotalPlans] = useState<number>(0)
+	const [subscriptionCount, setSubscriptionCount] = useState<number>(1)
 
 	// eslint-disable-next-line react-hooks/exhaustive-deps
 	const initData = async () => {
@@ -62,11 +63,11 @@ export default function CreateSubscription() {
 				const tx = await wcmp.deposit(plan.amount)
 				const receipt = await tx.wait()
 				//1.4.  approve Payment contract to spend WCMP
-				const tx2 = await wcmp.approve(MAIN_WCMP_PAYMENT_ADDRESS, plan.amount)
+				const tx2 = await wcmp.approve(MAIN_WCMP_PAYMENT_ADDRESS, plan.amount.mul(subscriptionCount))
 				const receipt2 = await tx2.wait()
 			} else {
 				console.log('Sufficient WCMP balance')
-				const tx = await wcmp.approve(MAIN_WCMP_PAYMENT_ADDRESS, plan.amount)
+				const tx = await wcmp.approve(MAIN_WCMP_PAYMENT_ADDRESS, plan.amount.mul(subscriptionCount))
 				const receipt = await tx.wait()
 			}
 			//3. Subscribe to plan
@@ -123,6 +124,11 @@ export default function CreateSubscription() {
 		loadPlan(planId)
 	}
 
+	const handleSubscriptionsCount = (e: React.ChangeEvent<HTMLInputElement>) => {
+		const count = parseInt(e.target.value)
+		setSubscriptionCount(count)
+	}
+
 	// const getUserSubscriptions = async () => {
 	// 	try {
 	// 		const plans = await payment.getSubscriptions(address?.toString() ?? '')
@@ -160,6 +166,20 @@ export default function CreateSubscription() {
 											</option>
 										))}
 									</select>
+								</div>
+								<label className="block text-sm font-semibold leading-6 text-gray-900 text-left">
+									Approve amount for number of subscriptions
+								</label>
+								<div className="mt-2.5">
+									<input
+										name="plan-title"
+										id="plan-title"
+										type="number"
+										min={1}
+										defaultValue={1}
+										className="block w-full rounded-md border-0 px-3.5 py-2 bg-white text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+										onChange={handleSubscriptionsCount}
+									/>
 								</div>
 							</div>
 							<div className="text-gray-900">
