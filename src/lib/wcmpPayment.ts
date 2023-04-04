@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { useContractWrite, useSigner } from 'wagmi'
 import { getContract, getProvider } from 'wagmi/actions'
 import { MAIN_WCMP_PAYMENT_ADDRESS } from './consts'
+import { Subscription } from './types/CMPPayment'
 
 export const WCMP_PAYMENT_ABI = [
 	{
@@ -367,7 +368,7 @@ export const getPlan = async (planId: number) => {
 	return plan
 }
 
-export const getSubscription = async (address: string, planId: number) => {
+export const getSubscription = async (address: string, planId: number): Promise<Subscription> => {
 	const wcmpContract = getContractInstance()
 	const subscription = await wcmpContract.subscriptions(address, planId)
 	return subscription
