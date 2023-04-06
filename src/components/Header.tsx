@@ -11,6 +11,8 @@ const navigation = [
 	{ name: 'Browse', href: '/browse' },
 	{ name: 'Create', href: '/create' },
 	{ name: 'How it works', href: '/how-it-works' },
+	{ name: 'Plans', href: '/plans' },
+	{ name: 'Subscription', href: '/create-subscription' },
 ]
 
 export default function Header() {

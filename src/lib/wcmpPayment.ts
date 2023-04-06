@@ -4,8 +4,81 @@ import { useState } from 'react'
 import { useContractWrite, useSigner } from 'wagmi'
 import { getContract, getProvider } from 'wagmi/actions'
 import { MAIN_WCMP_PAYMENT_ADDRESS } from './consts'
+import { Subscription } from './types/CMPPayment'
 
 export const WCMP_PAYMENT_ABI = [
+	{
+		inputs: [
+			{
+				internalType: 'uint256',
+				name: 'planId',
+				type: 'uint256',
+			},
+		],
+		name: 'cancel',
+		outputs: [],
+		stateMutability: 'nonpayable',
+		type: 'function',
+	},
+	{
+		inputs: [
+			{
+				internalType: 'address',
+				name: 'token',
+				type: 'address',
+			},
+			{
+				internalType: 'uint256',
+				name: 'amount',
+				type: 'uint256',
+			},
+			{
+				internalType: 'uint256',
+				name: 'frequency',
+				type: 'uint256',
+			},
+		],
+		name: 'createPlan',
+		outputs: [],
+		stateMutability: 'nonpayable',
+		type: 'function',
+	},
+	{
+		inputs: [
+			{
+				internalType: 'address',
+				name: 'subscriber',
+				type: 'address',
+			},
+			{
+				internalType: 'uint256',
+				name: 'planId',
+				type: 'uint256',
+			},
+		],
+		name: 'pay',
+		outputs: [],
+		stateMutability: 'nonpayable',
+		type: 'function',
+	},
+	{
+		inputs: [
+			{
+				internalType: 'address',
+				name: 'subscriber',
+				type: 'address',
+			},
+			{
+				internalType: 'uint256',
+				name: 'planId',
+				type: 'uint256',
+			},
+		],
+		name: 'payCMP',
+		outputs: [],
+		stateMutability: 'payable',
+		type: 'function',
+	},
 	{
 		anonymous: false,
 		inputs: [
@@ -74,6 +147,44 @@ export const WCMP_PAYMENT_ABI = [
 			{
 				indexed: false,
 				internalType: 'address',
+				name: 'merchant',
+				type: 'address',
+			},
+			{
+				indexed: false,
+				internalType: 'uint256',
+				name: 'planId',
+				type: 'uint256',
+			},
+			{
+				indexed: false,
+				internalType: 'uint256',
+				name: 'date',
+				type: 'uint256',
+			},
+		],
+		name: 'PlanUpdated',
+		type: 'event',
+	},
+	{
+		inputs: [
+			{
+				internalType: 'uint256',
+				name: 'planId',
+				type: 'uint256',
+			},
+		],
+		name: 'subscribe',
+		outputs: [],
+		stateMutability: 'nonpayable',
+		type: 'function',
+	},
+	{
+		anonymous: false,
+		inputs: [
+			{
+				indexed: false,
+				internalType: 'address',
 				name: 'subscriber',
 				type: 'address',
 			},
@@ -125,31 +236,13 @@ export const WCMP_PAYMENT_ABI = [
 				name: 'planId',
 				type: 'uint256',
 			},
-		],
-		name: 'cancel',
-		outputs: [],
-		stateMutability: 'nonpayable',
-		type: 'function',
-	},
-	{
-		inputs: [
 			{
 				internalType: 'address',
-				name: 'token',
+				name: 'merchant',
 				type: 'address',
 			},
-			{
-				internalType: 'uint256',
-				name: 'amount',
-				type: 'uint256',
-			},
-			{
-				internalType: 'uint256',
-				name: 'frequency',
-				type: 'uint256',
-			},
 		],
-		name: 'createPlan',
+		name: 'updatePlan',
 		outputs: [],
 		stateMutability: 'nonpayable',
 		type: 'function',
@@ -165,42 +258,6 @@ export const WCMP_PAYMENT_ABI = [
 			},
 		],
 		stateMutability: 'view',
-		type: 'function',
-	},
-	{
-		inputs: [
-			{
-				internalType: 'address',
-				name: 'subscriber',
-				type: 'address',
-			},
-			{
-				internalType: 'uint256',
-				name: 'planId',
-				type: 'uint256',
-			},
-		],
-		name: 'pay',
-		outputs: [],
-		stateMutability: 'nonpayable',
-		type: 'function',
-	},
-	{
-		inputs: [
-			{
-				internalType: 'address',
-				name: 'subscriber',
-				type: 'address',
-			},
-			{
-				internalType: 'uint256',
-				name: 'planId',
-				type: 'uint256',
-			},
-		],
-		name: 'payCMP',
-		outputs: [],
-		stateMutability: 'payable',
 		type: 'function',
 	},
 	{
@@ -235,19 +292,6 @@ export const WCMP_PAYMENT_ABI = [
 			},
 		],
 		stateMutability: 'view',
-		type: 'function',
-	},
-	{
-		inputs: [
-			{
-				internalType: 'uint256',
-				name: 'planId',
-				type: 'uint256',
-			},
-		],
-		name: 'subscribe',
-		outputs: [],
-		stateMutability: 'nonpayable',
 		type: 'function',
 	},
 	{
@@ -319,9 +363,21 @@ export const createPlan = async (token: string, amount: number | BigNumber, freq
 	return tx
 }
 
+export const updatePlan = async (planId: string | number, merchant: string) => {
+	const wcmpContract = getContractInstanceWithSigner()
+	const tx = await wcmpContract.updatePlan(planId, merchant)
+	return tx
+}
+
 export const subscribe = async (planId: number) => {
 	const wcmpContract = getContractInstanceWithSigner()
 	const tx = await wcmpContract.subscribe(planId)
+	return tx
+}
+
+export const cancelSubscription = async (planId: number) => {
+	const wcmpContract = getContractInstanceWithSigner()
+	const tx = await wcmpContract.cancel(planId)
 	return tx
 }
 
@@ -361,7 +417,7 @@ export const getPlan = async (planId: number) => {
 	return plan
 }
 
-export const getSubscription = async (address: string, planId: number) => {
+export const getSubscription = async (address: string, planId: number): Promise<Subscription> => {
 	const wcmpContract = getContractInstance()
 	const subscription = await wcmpContract.subscriptions(address, planId)
 	return subscription
