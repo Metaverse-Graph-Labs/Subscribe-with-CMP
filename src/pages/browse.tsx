@@ -1,6 +1,7 @@
 import { supabaseClient } from '@/lib/supapase-client'
 import { useAuth, useSession } from '@clerk/nextjs'
 import { BuildingOfficeIcon, CurrencyDollarIcon } from '@heroicons/react/24/outline'
+import Link from 'next/link'
 import { useEffect, useState } from 'react'
 import { Database } from 'types/supabase'
 
@@ -92,6 +93,11 @@ export default function Browse() {
 							and more businesses will want to accept CMP into their websites. Come back to see what else
 							you can spend your money on.
 						</p>
+						<div className="mt-5">
+							<Link href={'/create'} className="glow-on-hover pt-5">
+								Create Your Own Subscription
+							</Link>
+						</div>
 					</div>
 					<div className="mx-auto mt-16 max-w-2xl sm:mt-20 lg:mt-24 lg:max-w-none">
 						<dl className="grid max-w-xl grid-cols-1 gap-x-8 gap-y-16 lg:max-w-none lg:grid-cols-1">

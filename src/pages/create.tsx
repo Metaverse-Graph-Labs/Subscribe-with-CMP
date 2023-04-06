@@ -1,3 +1,4 @@
+import SubscriptionForm from '@/components/SubscriptionForm'
 import { BellAlertIcon, PlusCircleIcon, UserPlusIcon } from '@heroicons/react/20/solid'
 
 const features = [
@@ -22,7 +23,7 @@ const features = [
 	},
 ]
 
-export default function Utorg() {
+export default function Create() {
 	return (
 		<div className="w-full ">
 			<div className="py-24 sm:py-32 w-full ">
@@ -57,6 +58,7 @@ export default function Utorg() {
 							))}
 						</dl>
 					</div>
+					<SubscriptionForm />
 				</div>
 			</div>
 		</div>
