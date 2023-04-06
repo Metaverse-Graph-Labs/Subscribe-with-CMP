@@ -1,10 +1,9 @@
-import Header from '@/components/Header'
+import { Plan } from '@/lib/types/CMPPayment'
+import * as payment from '@/lib/wcmpPayment'
+import { BigNumber, ethers, Signer } from 'ethers'
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
 import { useAccount, useSigner } from 'wagmi'
-import * as payment from '@/lib/wcmpPayment'
-import { BigNumber, ethers, Signer } from 'ethers'
-import { Plan } from '@/lib/types/CMPPayment'
 
 export default function CreatePlan() {
 	const { data } = useSigner()
@@ -83,87 +82,84 @@ export default function CreatePlan() {
 
 	return (
 		<>
-			<div className="h-screen bg-white">
-				<Header />
-				<main className="grid h-[calc(100%-80px)] place-items-center bg-white py-24 px-6 sm:py-32 lg:px-8">
-					<div className="text-center">
-						<h1 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-5xl">Plans</h1>
+			<main className="grid h-[calc(100%-80px)] place-items-center bg-white py-24 px-6 sm:py-32 lg:px-8">
+				<div className="text-center">
+					<h1 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-5xl">Plans</h1>
 
-						<div className="grid grid-cols-1 gap-x-8 gap-y-6 sm:grid-cols-2 place-items-left mt-12">
-							{/* Plans */}
-							<div className="sm:col-span-2">
-								<label className="block text-sm font-semibold leading-6 text-gray-900 text-left">
-									Plans
-								</label>
-								<div className="mt-2.5">
-									<select
-										name="plan-title"
-										id="plan-title"
-										disabled={editing}
-										className="block w-full rounded-md border-0 px-3.5 py-2 bg-white text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-										onChange={handleLoadPlan}
-									>
-										{[...Array(totalPlans)].map((x, i) => (
-											<option key={i} value={i}>
-												Plan {i}
-											</option>
-										))}
-									</select>
-								</div>
+					<div className="grid grid-cols-1 gap-x-8 gap-y-6 sm:grid-cols-2 place-items-left mt-12">
+						{/* Plans */}
+						<div className="sm:col-span-2">
+							<label className="block text-sm font-semibold leading-6 text-gray-900 text-left">
+								Plans
+							</label>
+							<div className="mt-2.5">
+								<select
+									name="plan-title"
+									id="plan-title"
+									disabled={editing}
+									className="block w-full rounded-md border-0 px-3.5 py-2 bg-white text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+									onChange={handleLoadPlan}
+								>
+									{[...Array(totalPlans)].map((x, i) => (
+										<option key={i} value={i}>
+											Plan {i}
+										</option>
+									))}
+								</select>
 							</div>
-							<div className="text-gray-900">
-								{plan && (
-									<>
-										<p>Merchant: {plan.merchant}</p>
-										<p>Payment Token: {plan.token}</p>
-										<p>Amount: {plan.amount.toString()}</p>
-										<p>Duration/Frequency: {plan.frequency.toString()}</p>
-									</>
-								)}
-								{!plan && <p>No plans found.</p>}
-							</div>
-							{/* Update Merchant */}
-							{editing && (
+						</div>
+						<div className="text-gray-900">
+							{plan && (
 								<>
-									<div className="sm:col-span-2">
-										<label className="block text-sm font-semibold leading-6 text-gray-900 text-left">
-											New Merchant
-										</label>
-										<div className="mt-2.5">
-											<input
-												type="text"
-												name="new-merchant"
-												id="new-merchant"
-												className="block w-full rounded-md border-0 px-3.5 py-2 bg-white text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-												onChange={e => {
-													setNewMerchant(e.target.value)
-												}}
-											/>
-										</div>
-
-										<div className="mt-10 flex items-center justify-center gap-x-6">
-											<Link href="" className="glow-on-hover" onClick={updateMerchant}>
-												Update Merchant
-											</Link>
-											<Link href="" className="glow-on-hover" onClick={toggleEdit}>
-												Cancel
-											</Link>
-										</div>
-									</div>
+									<p>Merchant: {plan.merchant}</p>
+									<p>Payment Token: {plan.token}</p>
+									<p>Amount: {plan.amount.toString()}</p>
+									<p>Duration/Frequency: {plan.frequency.toString()}</p>
 								</>
 							)}
+							{!plan && <p>No plans found.</p>}
 						</div>
+						{/* Update Merchant */}
+						{editing && (
+							<>
+								<div className="sm:col-span-2">
+									<label className="block text-sm font-semibold leading-6 text-gray-900 text-left">
+										New Merchant
+									</label>
+									<div className="mt-2.5">
+										<input
+											type="text"
+											name="new-merchant"
+											id="new-merchant"
+											className="block w-full rounded-md border-0 px-3.5 py-2 bg-white text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+											onChange={e => {
+												setNewMerchant(e.target.value)
+											}}
+										/>
+									</div>
 
-						{!editing && (
-							<div className="mt-10 flex items-center justify-center gap-x-6">
-								<Link href="" className="glow-on-hover" onClick={toggleEdit}>
-									Edit Plan
-								</Link>
-							</div>
+									<div className="mt-10 flex items-center justify-center gap-x-6">
+										<Link href="" className="glow-on-hover" onClick={updateMerchant}>
+											Update Merchant
+										</Link>
+										<Link href="" className="glow-on-hover" onClick={toggleEdit}>
+											Cancel
+										</Link>
+									</div>
+								</div>
+							</>
 						)}
 					</div>
-				</main>
-			</div>
+
+					{!editing && (
+						<div className="mt-10 flex items-center justify-center gap-x-6">
+							<Link href="" className="glow-on-hover" onClick={toggleEdit}>
+								Edit Plan
+							</Link>
+						</div>
+					)}
+				</div>
+			</main>
 		</>
 	)
 }
