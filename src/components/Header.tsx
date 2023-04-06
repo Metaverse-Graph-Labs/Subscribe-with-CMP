@@ -6,6 +6,8 @@ import Link from 'next/link'
 import Image from 'next/image'
 
 const navigation = [
+	{ name: '- Plans -', href: '/plans' },
+	{ name: '- Subscription -', href: '/create-subscription' },
 	{ name: 'Buy with Utorg', href: '/utorg' },
 	{ name: 'Buy with Swipelux', href: '/coming-soon' },
 	{ name: 'Buy with Alchemy Pay', href: '/coming-soon' },
