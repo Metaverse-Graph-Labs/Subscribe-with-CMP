@@ -95,10 +95,10 @@ export default function CreatePlan() {
 									/>
 								</div>
 							</div>
-							{/* Subscription Period (In Days) */}
+							{/* Subscription Period (In Months) */}
 							<div className="sm:col-span-2">
 								<label className="block text-sm font-semibold leading-6 text-gray-900 text-left">
-									Subscription Period (In Days)
+									Subscription Period (In Months)
 								</label>
 								<div className="mt-2.5">
 									<input

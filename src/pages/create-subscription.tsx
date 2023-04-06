@@ -26,7 +26,9 @@ export default function CreateSubscription() {
 		const nextPlanId = (await payment.getNextPlanId()).toString()
 		console.log({ nextPlanId })
 		setTotalPlans(parseInt(nextPlanId))
-		// await getUserSubscriptions()
+		if (nextPlanId > 0) {
+			loadPlan(0)
+		}
 	}
 
 	useEffect(() => {
@@ -38,7 +40,7 @@ export default function CreateSubscription() {
 	}, [])
 
 	const subscribe = async () => {
-		console.log('Subscribing...')
+		console.log('Subscribing...', signer.data)
 		if (!isConnected) {
 			alert('Please connect your wallet first.')
 			return
