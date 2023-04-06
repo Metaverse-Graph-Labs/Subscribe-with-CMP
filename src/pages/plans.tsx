@@ -1,9 +1,8 @@
 import Header from '@/components/Header'
 import Link from 'next/link'
-import { MouseEventHandler, useEffect, useState } from 'react'
-import { useAccount, useProvider, useSigner } from 'wagmi'
+import { useEffect, useState } from 'react'
+import { useAccount, useSigner } from 'wagmi'
 import * as payment from '@/lib/wcmpPayment'
-import { MAIN_WCMP_ADDRESS } from '@/lib/consts'
 import { BigNumber, ethers, Signer } from 'ethers'
 import { Plan } from '@/lib/types/CMPPayment'
 
