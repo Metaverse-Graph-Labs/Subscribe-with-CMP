@@ -82,7 +82,7 @@ export default function CreatePlan() {
 
 	return (
 		<>
-			<main className="grid h-[calc(100%-80px)] place-items-center bg-white py-24 px-6 sm:py-32 lg:px-8">
+			<main className="grid h-[calc(100%-80px)] place-items-center py-24 px-6 sm:py-32 lg:px-8">
 				<div className="text-center">
 					<h1 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-5xl">Plans</h1>
 
